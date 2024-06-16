@@ -1,4 +1,4 @@
-﻿#define MAX_RIPPLE_COUNT 10
+﻿#define MAX_RIPPLE_COUNT 20
 
 uniform float rippleOriginList[MAX_RIPPLE_COUNT*3];
 uniform float rippleDirectionList[MAX_RIPPLE_COUNT*3];

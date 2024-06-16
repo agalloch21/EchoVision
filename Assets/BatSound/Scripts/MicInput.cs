@@ -3,7 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using TMPro;
+using HoloKit.iOS;
 
+
+/// <summary>
+/// Code from https://forum.unity.com/threads/check-current-microphone-input-volume.133501/
+/// </summary>
 public class MicInput : MonoBehaviour
 {
 
@@ -14,16 +19,20 @@ public class MicInput : MonoBehaviour
     public UnityEvent<float, float> OnSoundPlay;
 
     public TextMeshProUGUI volumeText;
+    public UnityEngine.UI.Text recordingText;
 
     //
     float _lastTriggerTime = 0f;
     float _triggerIntervel = 0.5f;
+    public HoloKitVideoRecorder videoRecorder;
 
     //mic initialization
     void InitMic()
     {
         if (_device == null) _device = Microphone.devices[0];
-        _clipRecord = Microphone.Start(_device, true, 999, 44100);
+         _clipRecord = Microphone.Start(_device, true, 1, 44100);
+        audioSource = GetComponent<AudioSource>();
+        audioSource.clip = _clipRecord;
     }
 
     void StopMicrophone()
@@ -31,9 +40,9 @@ public class MicInput : MonoBehaviour
         Microphone.End(_device);
     }
 
-
+    AudioSource audioSource;
     AudioClip _clipRecord;
-    int _sampleWindow = 128;
+    int _sampleWindow = 32;
 
     //get data from microphone into audioclip
     float LevelMax()
@@ -69,12 +78,13 @@ public class MicInput : MonoBehaviour
             {
                 float volume = (Mathf.Clamp01(MicLoudness) / 0.20f);// 1;
                 float pitch = 1;
-                OnSoundPlay?.Invoke(volume, pitch);
-                Debug.Log("OnSoundPlay with a volume: " + MicLoudness);
+                //OnSoundPlay?.Invoke(volume, pitch);
+                //Debug.Log("OnSoundPlay with a volume: " + MicLoudness);
                 _lastTriggerTime = Time.time;
             }
 
         }
+        Debug.Log("LevelMax:" + MicLoudness.ToString("0.0000"));
     }
 
     bool _isInitialized;
@@ -156,5 +166,16 @@ public class MicInput : MonoBehaviour
             freqN += 0.5f * (dR * dR - dL * dL);
         }
         pitchVal = freqN * (_fSample / 2) / QSamples; // convert index to frequency
+    }
+
+    public void ToggleRecording()
+    {
+        if(videoRecorder.IsRecording == false)
+        {
+            videoRecorder._microphoneAudioSource.clip = _clipRecord;
+        }
+        videoRecorder.ToggleRecording();
+        recordingText.text = videoRecorder.IsRecording ? "Stop Recording" : "Start Recording";
+        
     }
 }
