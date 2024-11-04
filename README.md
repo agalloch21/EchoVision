@@ -1,3 +1,11 @@
+# Deprecated. 
+
+Has moved to https://github.com/realitydeslab/echovisionpro
+<br>
+<br>
+
+
+
 # becoming-bats
 
 This project features a sample that demonstrates using voice as input to activate position-related spatial visual effects within an AR scene. Inspired by how bats detect their surroundings with their own sound.
