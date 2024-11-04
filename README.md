@@ -1,6 +1,6 @@
 # Deprecated. 
 
-Has moved to https://github.com/realitydeslab/echovisionpro
+Has moved to https://github.com/realitydeslab/echovision
 <br>
 <br>
 
